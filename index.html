@@ -66,6 +66,14 @@
             </div>
 
             <button
+                    id="shareButton"
+                    class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 mb-3"
+            >
+                <i data-lucide="share-2" class="w-5 h-5"></i>
+                Share
+            </button>
+
+            <button
                     id="downloadButton"
                     class="w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
             >
@@ -97,25 +105,19 @@
     const sourceImage = document.getElementById('sourceImage');
     const mobileInput = document.getElementById('mobileNumber');
     const downloadButton = document.getElementById('downloadButton');
+    const shareButton = document.getElementById('shareButton');
     const errorMessage = document.getElementById('error-message');
 
     function drawPoster() {
         const mobileNumber = mobileInput.value;
-
-        // Set canvas dimensions based on source image
         canvas.width = sourceImage.width;
         canvas.height = sourceImage.height;
-
-        // Draw image
         ctx.drawImage(sourceImage, 0, 0);
-
-        // Add mobile number
         ctx.font = 'bold 80px Arial';
         ctx.fillStyle = 'red';
         ctx.fillText(mobileNumber, 630, 890);
     }
 
-    // Handle download
     downloadButton.addEventListener('click', () => {
         const mobileNumber = mobileInput.value;
         if (!/^[0-9]{10}$/.test(mobileNumber)) {
@@ -123,17 +125,29 @@
             return;
         }
         errorMessage.classList.add('hidden');
-
         drawPoster();
-
-        // Create download link
         const link = document.createElement('a');
         link.download = `${mobileNumber}_nidhivan.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
     });
 
-    // Input validation
+    shareButton.addEventListener('click', async () => {
+        drawPoster();
+        canvas.toBlob(blob => {
+            const file = new File([blob], 'poster.png', { type: 'image/png' });
+            if (navigator.share) {
+                navigator.share({
+                    files: [file],
+                    title: 'Nidhivan Poster',
+                    text: 'Check out this property!',
+                });
+            } else {
+                alert('Sharing is not supported on this device.');
+            }
+        }, 'image/png');
+    });
+
     mobileInput.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
         if (/^[0-9]{10}$/.test(e.target.value)) {
