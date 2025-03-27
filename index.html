@@ -46,15 +46,6 @@
             <p class="text-green-400 text-lg">A Premium Development by Madhav Infrastructure</p>
         </div>
 
-        <!-- Project Image -->
-<!--        <div class="mb-12 rounded-xl overflow-hidden shadow-2xl">-->
-<!--            <img-->
-<!--                    src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=2400&q=80"-->
-<!--                    alt="Nidhivan Property"-->
-<!--                    class="w-full h-[400px] object-cover"-->
-<!--            />-->
-<!--        </div>-->
-
         <!-- Download Form Card -->
         <div class="max-w-md mx-auto bg-green-900/50 backdrop-blur-sm rounded-xl p-8 shadow-xl border border-green-800">
             <h3 class="text-2xl font-semibold mb-6 text-center">Download Project Brochure</h3>
@@ -71,6 +62,7 @@
                         placeholder="Your mobile number"
                         maxlength="10"
                 />
+                <p id="error-message" class="text-red-500 text-sm mt-1 hidden">Please enter a valid 10-digit mobile number.</p>
             </div>
 
             <button
@@ -105,6 +97,7 @@
     const sourceImage = document.getElementById('sourceImage');
     const mobileInput = document.getElementById('mobileNumber');
     const downloadButton = document.getElementById('downloadButton');
+    const errorMessage = document.getElementById('error-message');
 
     function drawPoster() {
         const mobileNumber = mobileInput.value;
@@ -125,10 +118,11 @@
     // Handle download
     downloadButton.addEventListener('click', () => {
         const mobileNumber = mobileInput.value;
-        if (!mobileNumber) {
-            alert('Please enter a mobile number');
+        if (!/^[0-9]{10}$/.test(mobileNumber)) {
+            errorMessage.classList.remove('hidden');
             return;
         }
+        errorMessage.classList.add('hidden');
 
         drawPoster();
 
@@ -142,6 +136,9 @@
     // Input validation
     mobileInput.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+        if (/^[0-9]{10}$/.test(e.target.value)) {
+            errorMessage.classList.add('hidden');
+        }
     });
 </script>
 </body>
