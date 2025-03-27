@@ -172,7 +172,7 @@
         errorMessage.classList.add('hidden');
         drawPoster();
         const imageUrl = canvas.toDataURL('image/png');
-        const whatsappUrl = `https://api.whatsapp.com/send?phone=9979231280&media=${encodeURIComponent(imageUrl)}`;
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=9979231280&&media=${encodeURIComponent(imageUrl)}`;
         window.open(whatsappUrl, '_blank');
     });
 
